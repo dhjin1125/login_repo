@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { INSTAGRAM_CONFIG } from '../config/instagram.config'
 import '../styles/MainPage.css'
 
 // 더미 스레드 데이터
@@ -66,18 +67,20 @@ function MainPage() {
   const [loading, setLoading] = useState(true)
   const [threads, setThreads] = useState([])
   const [searchKeyword, setSearchKeyword] = useState('')
+  const [grantedPermissions, setGrantedPermissions] = useState([])
 
   useEffect(() => {
     // 로그인 상태 확인
     const authData = localStorage.getItem('instagramAuth')
     
     if (!authData) {
-      // 로그인하지 않은 경우 로그인 페이지로 이동
-      navigate('/login')
+      // 로그인하지 않은 경우 권한 페이지로 이동
+      navigate('/permissions')
     } else {
       // 사용자 정보 설정
       const userData = JSON.parse(authData)
       setUser(userData.user)
+      setGrantedPermissions(userData.grantedPermissions || INSTAGRAM_CONFIG.SCOPES)
       
       // 더미 스레드 데이터 로드
       setThreads(DUMMY_THREADS)
@@ -127,16 +130,59 @@ function MainPage() {
           <p>최신 Threads 글들을 확인해보세요</p>
         </div>
 
-        {/* 검색 바 */}
-        <div className="search-section">
-          <input
-            type="text"
-            placeholder="키워드로 검색해보세요 (예: React, JavaScript, 성능 최적화)"
-            value={searchKeyword}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-            className="search-input"
-          />
+        {/* 권한 정보 카드 */}
+        <div className="permissions-card">
+          <div className="permissions-header-title">
+            <span className="lock-icon">🔐</span>
+            <h3>부여된 권한</h3>
+          </div>
+          <div className="permissions-grid">
+            {grantedPermissions.map((perm) => (
+              <div key={perm} className="permission-item-card">
+                <div className="perm-icon">
+                  {perm === 'user_profile' && '👤'}
+                  {perm === 'user_media' && '📸'}
+                  {perm === 'threads_basic' && '📱'}
+                  {perm === 'threads_read_replies' && '💬'}
+                  {perm === 'threads_keyword_search' && '🔍'}
+                </div>
+                <div className="perm-name">
+                  {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.name || perm}
+                </div>
+                <div className="perm-check">✓</div>
+              </div>
+            ))}
+          </div>
         </div>
+
+        {/* 기능 안내 */}
+        {grantedPermissions.includes('threads_keyword_search') && (
+          <div className="feature-info-box">
+            <span className="info-icon">🔍</span>
+            <p><strong>키워드 검색:</strong> 활성화됨 - 아래 검색창에서 Threads를 검색할 수 있습니다</p>
+          </div>
+        )}
+
+        {grantedPermissions.includes('threads_read_replies') && (
+          <div className="feature-info-box">
+            <span className="info-icon">💬</span>
+            <p><strong>댓글 보기:</strong> 활성화됨 - 각 게시물의 댓글 수를 확인할 수 있습니다</p>
+          </div>
+        )}
+
+        {/* 검색 바 */}
+        {grantedPermissions.includes('threads_keyword_search') && (
+          <div className="search-section">
+            <input
+              type="text"
+              placeholder="키워드로 검색해보세요 (예: React, JavaScript, 성능 최적화)"
+              value={searchKeyword}
+              onChange={(e) => setSearchKeyword(e.target.value)}
+              className="search-input"
+            />
+            <div className="search-hint">💡 키워드로 Threads를 검색하고 관련 댓글을 확인하세요</div>
+          </div>
+        )}
 
         {/* 스레드 목록 */}
         <div className="threads-section">
@@ -164,17 +210,25 @@ function MainPage() {
                   </div>
                   
                   <div className="thread-stats">
-                    <div className="stat-item">
-                      <span className="stat-icon">💬</span>
-                      <span className="stat-label">댓글</span>
-                      <span className="stat-value">{thread.comments}</span>
-                    </div>
+                    {grantedPermissions.includes('threads_read_replies') && (
+                      <div className="stat-item">
+                        <span className="stat-icon">💬</span>
+                        <span className="stat-label">댓글</span>
+                        <span className="stat-value">{thread.comments}</span>
+                      </div>
+                    )}
                     <div className="stat-item">
                       <span className="stat-icon">❤️</span>
                       <span className="stat-label">좋아요</span>
                       <span className="stat-value">{thread.likes}</span>
                     </div>
                   </div>
+
+                  {grantedPermissions.includes('threads_read_replies') && thread.comments > 0 && (
+                    <div className="thread-replies-info">
+                      <span>💭 {thread.comments}개의 답글이 있습니다</span>
+                    </div>
+                  )}
                 </article>
               ))}
             </div>

@@ -1,16 +1,271 @@
-# React + Vite
+# 🧵 ThreadsRank
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Instagram Threads OAuth를 사용한 스레드 로그인 및 피드 조회 애플리케이션입니다.
 
-Currently, two official plugins are available:
+## 🎯 주요 기능
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. 전체 로그인 플로우 (End-to-End)
+```
+시작 → 권한 요청 → 로그인 → OAuth 인증 → Threads 피드
+```
 
-## React Compiler
+### 2. 권한 관리 시스템
+사용자가 로그인 전에 앱에 필요한 권한을 선택하고 승인할 수 있습니다:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+#### 요청 가능한 권한:
+- **👤 프로필 정보** (`user_profile`): 사용자 프로필 정보 접근
+- **📸 미디어 정보** (`user_media`): 사용자 미디어 목록 접근
+- **📱 Threads 기본** (`threads_basic`): Threads 콘텐츠 및 메타데이터 접근
+- **💬 Threads 답글 읽기** (`threads_read_replies`): Threads의 댓글 및 답글 접근
+- **🔍 Threads 키워드 검색** (`threads_keyword_search`): 키워드로 Threads 검색
 
-## Expanding the ESLint configuration
+### 3. 권한별 기능 활성화
+메인 페이지에서 부여된 권한에 따라 다음 기능들이 활성화됩니다:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| 권한 | 활성화되는 기능 |
+|------|----------------|
+| `threads_keyword_search` | 🔍 검색 바 표시, 키워드 검색 기능 |
+| `threads_read_replies` | 💬 댓글 수 표시, 답글 정보 표시 |
+| `threads_basic` | 📱 Threads 기본 콘텐츠 표시 |
+
+## 📁 프로젝트 구조
+
+```
+src/
+├── pages/
+│   ├── PermissionsPage.jsx    # 권한 요청 페이지 (사용자 권한 선택)
+│   ├── LoginPage.jsx          # Instagram 로그인 페이지
+│   ├── MainPage.jsx           # Threads 피드 페이지 (메인)
+│   └── AuthCallback.jsx       # OAuth 콜백 처리
+├── services/
+│   └── InstagramAuthService.js # Threads API 및 OAuth 서비스
+├── config/
+│   └── instagram.config.js     # OAuth 및 API 설정
+├── styles/
+│   ├── PermissionsPage.css     # 권한 페이지 스타일
+│   ├── LoginPage.css           # 로그인 페이지 스타일
+│   └── MainPage.css            # 메인 페이지 스타일
+├── App.jsx                     # 라우팅 설정
+└── main.jsx                    # 진입점
+```
+
+## 📋 사용 사례 (Use Case)
+
+### 시나리오 1️⃣: 전체 권한으로 로그인
+```
+1. 앱 시작 → 권한 선택 페이지 표시
+2. "모두 선택" 클릭 → 모든 권한 선택
+3. "권한 선택 완료" → 로그인 페이지로 이동
+4. "Instagram으로 로그인" → Instagram OAuth 인증
+5. 메인 페이지에서 모든 기능 활성화:
+   ✅ 부여된 권한 카드 표시 (5개 모두)
+   ✅ 키워드 검색 바 활성화
+   ✅ 댓글 수 표시
+   ✅ 답글 정보 표시
+```
+
+### 시나리오 2️⃣: 선택적 권한으로 로그인
+```
+1. 권한 페이지에서 특정 권한만 선택
+   예: "Threads 기본", "Threads 답글 읽기"만 선택 (2개)
+2. "권한 선택 완료" → 로그인 진행
+3. 메인 페이지에서:
+   ✅ 선택된 권한 카드만 표시 (2개)
+   ❌ 검색 바는 숨겨짐 (threads_keyword_search 미선택)
+   ✅ 댓글 수는 표시됨 (threads_read_replies 선택)
+```
+
+### 시나리오 3️⃣: 권한 변경
+```
+1. 로그인 후 메인 페이지 → "권한 변경" 버튼 클릭
+2. 권한 페이지로 이동하여 권한 재설정
+3. 변경된 권한으로 재로그인
+```
+
+## 🛣️ 라우팅 맵
+
+| 경로 | 페이지 | 설명 |
+|------|--------|------|
+| `/` | MainPage | Threads 피드 (인증 필수) |
+| `/permissions` | PermissionsPage | 권한 선택 페이지 |
+| `/login` | LoginPage | Instagram 로그인 페이지 |
+| `/auth/callback` | AuthCallback | OAuth 콜백 처리 |
+
+## 🔌 권한별 API 메서드
+
+### InstagramAuthService에서 제공하는 메서드:
+
+```javascript
+// 권한: threads_basic, threads_keyword_search
+searchThreads(keyword, accessToken)
+
+// 권한: threads_read_replies
+getThreadReplies(threadId, accessToken)
+
+// 권한: threads_keyword_search
+getThreadsByKeyword(keyword, accessToken)
+
+// 권한: user_profile
+getUserProfile(accessToken)
+
+// 권한: user_media
+getUserMedia(accessToken)
+
+// 권한 확인
+hasPermissions(requiredPermissions, grantedPermissions)
+```
+
+## ⚙️ 설정 방법
+
+### 1️⃣ 환경 변수 설정
+프로젝트 루트에 `.env` 파일 생성:
+```env
+REACT_APP_INSTAGRAM_APP_ID=your_instagram_app_id
+REACT_APP_REDIRECT_URI=http://localhost:5173/auth/callback
+REACT_APP_BACKEND_API=http://localhost:3001/api
+```
+
+### 2️⃣ Meta Developer Console 설정
+1. [Meta Developers](https://developers.facebook.com) 접속
+2. 앱 생성 또는 선택
+3. Instagram Graph API 또는 Threads API 추가
+4. OAuth 리다이렉트 URI 등록:
+   - 개발: `http://localhost:5173/auth/callback`
+   - 프로덕션: `https://yourdomain.com/auth/callback`
+5. 앱 ID 복사하여 환경 변수에 설정
+
+### 3️⃣ 백엔드 API 구현 (필수)
+Authorization code를 access token으로 교환하는 엔드포인트 구현:
+
+```javascript
+// POST /api/auth/instagram/token
+// 요청:
+{
+  "code": "authorization_code_from_instagram"
+}
+
+// 응답:
+{
+  "accessToken": "access_token",
+  "user": {
+    "id": "user_id",
+    "username": "username",
+    "name": "Full Name",
+    "profile_picture_url": "https://..."
+  },
+  "grantedPermissions": ["user_profile", "threads_basic", "threads_read_replies", "threads_keyword_search"],
+  "timestamp": "2025-01-01T00:00:00Z"
+}
+```
+
+## 🎮 데모 모드
+
+현재 앱은 **데모 모드**로 실행되고 있습니다. 실제 Instagram 계정 없이 로그인을 테스트할 수 있습니다.
+
+### 데모 모드에서 실제 구현으로 변경:
+
+`src/pages/LoginPage.jsx`에서:
+```javascript
+// 주석 처리된 부분을 활성화
+// window.location.href = authUrl
+
+// 데모 코드는 제거
+// localStorage.setItem('instagramAuth', JSON.stringify(demoToken))
+```
+
+## 🔄 데이터 흐름
+
+```
+┌───────────────────────────────────────────────────┐
+│ PermissionsPage                                   │
+│ - 사용자가 요청할 권한 선택                         │
+│ - sessionStorage에 선택된 권한 저장                 │
+└────────────────┬────────────────────────────────┘
+                 │
+                 ▼
+┌───────────────────────────────────────────────────┐
+│ LoginPage                                         │
+│ - 선택된 권한으로 OAuth 로그인 URL 생성             │
+│ - Instagram 로그인 진행                           │
+│ - grantedPermissions을 localStorage에 저장         │
+└────────────────┬────────────────────────────────┘
+                 │
+                 ▼
+┌───────────────────────────────────────────────────┐
+│ AuthCallback                                      │
+│ - Authorization code 처리                         │
+│ - 백엔드에서 access token 교환                    │
+└────────────────┬────────────────────────────────┘
+                 │
+                 ▼
+┌───────────────────────────────────────────────────┐
+│ MainPage                                          │
+│ - localStorage에서 인증 정보 읽음                   │
+│ - grantedPermissions에 따라 기능 활성화             │
+│ - 권한에 맞는 Threads API 호출                    │
+│ - Threads 피드, 댓글, 검색 결과 표시              │
+└───────────────────────────────────────────────────┘
+```
+
+## 🚀 운영 및 배포
+
+### 개발 서버 실행
+```bash
+# 패키지 설치
+npm install
+
+# 개발 서버 시작
+npm run dev
+```
+
+개발 서버는 `http://localhost:5173`에서 실행됩니다.
+
+### 프로덕션 빌드
+```bash
+# 프로덕션 빌드
+npm run build
+
+# 빌드 미리보기
+npm run preview
+```
+
+## 🔐 보안 주의사항
+
+⚠️ **프로덕션 배포 시 다음을 반드시 확인하세요:**
+
+1. **HTTPS 필수**: 모든 OAuth 리다이렉트는 HTTPS에서만 작동
+2. **Client Secret 보호**: 절대 클라이언트 시크릿을 프론트엔드에 노출하지 마세요
+3. **Token 저장**: Access token은 httpOnly 쿠키에 저장하는 것이 더 안전합니다
+4. **CORS 설정**: 백엔드에서 적절한 CORS 설정을 구성하세요
+5. **권한 검증**: 백엔드에서 모든 API 요청 시 권한을 검증하세요
+6. **Rate Limiting**: API 요청에 대한 rate limiting을 구현하세요
+
+## 📊 권한별 기능 매트릭스
+
+| 기능 | threads_basic | threads_read_replies | threads_keyword_search |
+|------|:---:|:---:|:---:|
+| 기본 글 조회 | ✅ | ✅ | ✅ |
+| 댓글/답글 조회 | ❌ | ✅ | ✅ |
+| 키워드 검색 | ❌ | ❌ | ✅ |
+| 좋아요 수 | ✅ | ✅ | ✅ |
+
+## 📚 참고 자료
+
+- [Meta for Developers](https://developers.facebook.com/)
+- [Threads API Documentation](https://developers.facebook.com/docs/threads)
+- [Instagram Graph API](https://developers.facebook.com/docs/instagram-api)
+- [OAuth 2.0 Standard](https://tools.ietf.org/html/rfc6749)
+- [React Router Documentation](https://reactrouter.com/)
+- [Vite Documentation](https://vitejs.dev/)
+
+## 📝 라이선스
+
+MIT
+
+## 💬 지원
+
+문제가 발생하면 GitHub Issues에 보고해주세요.
+
+---
+
+**ThreadsRank** - Instagram Threads를 더 편하게 이용하세요! 🚀

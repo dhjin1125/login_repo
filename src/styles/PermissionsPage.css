@@ -1,0 +1,306 @@
+.permissions-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.permissions-box {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+}
+
+.permissions-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.permissions-header h1 {
+  font-size: 32px;
+  margin: 0 0 8px 0;
+  color: #000;
+  font-weight: 700;
+}
+
+.permissions-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.permissions-intro {
+  background-color: #f0f4ff;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border-left: 4px solid #667eea;
+}
+
+.permissions-intro p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* 권한 목록 */
+.permissions-list {
+  margin-bottom: 24px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.permission-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.permission-item:last-child {
+  border-bottom: none;
+}
+
+.permission-item:hover {
+  background-color: #f9f9f9;
+}
+
+.permission-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  margin-right: 16px;
+  cursor: pointer;
+  accent-color: #667eea;
+  flex-shrink: 0;
+}
+
+.permission-label {
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+.permission-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.permission-description {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* 권한 선택 도구 */
+.permission-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 10px 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.select-all-btn {
+  background-color: #f0f4ff;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.select-all-btn:hover {
+  background-color: #e8ecff;
+}
+
+.deselect-all-btn {
+  background-color: #fff0f0;
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.deselect-all-btn:hover {
+  background-color: #ffe8e8;
+}
+
+/* 권한 요약 */
+.permissions-summary {
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.permissions-summary h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #000;
+  font-weight: 600;
+}
+
+.selected-permissions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.permission-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #e8ecff;
+  color: #667eea;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  line-height: 1;
+  transition: opacity 0.2s ease;
+}
+
+.remove-btn:hover {
+  opacity: 0.7;
+}
+
+.no-permissions {
+  color: #999;
+  font-size: 13px;
+  margin: 0;
+  font-style: italic;
+}
+
+/* 정보 박스 */
+.info-box {
+  background-color: #fef8e7;
+  border-left: 4px solid #ffc107;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.info-box h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #000;
+}
+
+.info-box ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.info-box li {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.info-box li:last-child {
+  margin-bottom: 0;
+}
+
+/* 버튼 그룹 */
+.button-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cancel-btn,
+.continue-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #e0e0e0;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.continue-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.continue-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.cancel-btn:disabled,
+.continue-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.privacy-note {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .permissions-box {
+    padding: 24px;
+  }
+
+  .permissions-header h1 {
+    font-size: 24px;
+  }
+
+  .button-group {
+    grid-template-columns: 1fr;
+  }
+
+  .permission-item {
+    padding: 12px;
+  }
+
+  .permission-checkbox {
+    margin-right: 12px;
+  }
+}
