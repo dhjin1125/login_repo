@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { INSTAGRAM_CONFIG } from '../config/instagram.config'
-import PermissionsDialog from '../components/PermissionsDialog'
 import '../styles/PermissionsPage.css'
 
 function PermissionsPage() {
@@ -9,7 +8,10 @@ function PermissionsPage() {
   const location = useLocation()
   const [selectedPermissions, setSelectedPermissions] = useState(new Set())
   const [loading, setLoading] = useState(false)
-  const [showDialog, setShowDialog] = useState(false)
+
+  // 필수 권한 정의
+  const REQUIRED_SCOPES = ['threads_basic', 'threads_read_replies', 'threads_keyword_search']
+  const OPTIONAL_SCOPES = ['user_profile', 'user_media']
 
   // 모든 권한을 기본으로 선택
   useEffect(() => {
@@ -59,43 +61,68 @@ function PermissionsPage() {
           <p>앱이 필요로 하는 권한을 선택해주세요</p>
         </div>
 
-        {/* 필수 권한 소개 배너 */}
-        <div className="required-permissions-banner">
-          <button 
-            className="info-banner-btn"
-            onClick={() => setShowDialog(true)}
-          >
-            <span className="banner-icon">ℹ️</span>
-            <span className="banner-text">필수 권한에 대해 알아보기</span>
-            <span className="banner-arrow">→</span>
-          </button>
-        </div>
-
         <div className="permissions-intro">
           <p>이 앱은 다음 권한을 사용하여 더 나은 경험을 제공합니다:</p>
         </div>
 
-        {/* 권한 목록 */}
-        <div className="permissions-list">
-          {INSTAGRAM_CONFIG.SCOPES.map((scope) => (
-            <div key={scope} className="permission-item">
-              <input
-                type="checkbox"
-                id={`permission-${scope}`}
-                checked={selectedPermissions.has(scope)}
-                onChange={() => handlePermissionToggle(scope)}
-                className="permission-checkbox"
-              />
-              <label htmlFor={`permission-${scope}`} className="permission-label">
-                <div className="permission-title">
-                  {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[scope]?.name || scope}
+        {/* 필수 권한 (REQUIRED) */}
+        <div className="permissions-section required-section">
+          <div className="section-header">
+            <h3>⭐ 필수 권한</h3>
+            <span className="required-badge">REQUIRED</span>
+          </div>
+          <div className="permissions-list required-list">
+            {REQUIRED_SCOPES.map((scope) => (
+              <div key={scope} className="permission-item required-item">
+                <div className="permission-icon">
+                  {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[scope]?.icon}
                 </div>
-                <div className="permission-description">
-                  {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[scope]?.description || ''}
+                <div className="permission-code-name">
+                  {scope}
                 </div>
-              </label>
-            </div>
-          ))}
+                <input
+                  type="checkbox"
+                  id={`permission-${scope}`}
+                  checked={selectedPermissions.has(scope)}
+                  onChange={() => handlePermissionToggle(scope)}
+                  className="permission-checkbox"
+                  disabled
+                />
+              </div>
+            ))}
+          </div>
+          <div className="section-description">
+            <p>이 3개의 필수 권한은 Threads 기본 기능을 제공합니다.</p>
+          </div>
+        </div>
+
+        {/* 선택 권한 (OPTIONAL) */}
+        <div className="permissions-section optional-section">
+          <div className="section-header">
+            <h3>🔧 선택 권한</h3>
+            <span className="optional-badge">OPTIONAL</span>
+          </div>
+          <div className="permissions-list optional-list">
+            {OPTIONAL_SCOPES.map((scope) => (
+              <div key={scope} className="permission-item optional-item">
+                <input
+                  type="checkbox"
+                  id={`permission-${scope}`}
+                  checked={selectedPermissions.has(scope)}
+                  onChange={() => handlePermissionToggle(scope)}
+                  className="permission-checkbox"
+                />
+                <label htmlFor={`permission-${scope}`} className="permission-label-full">
+                  <div className="permission-title">
+                    {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[scope]?.displayName}
+                  </div>
+                  <div className="permission-description">
+                    {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[scope]?.description}
+                  </div>
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* 권한 선택 도구 */}
@@ -114,15 +141,18 @@ function PermissionsPage() {
           {selectedPermissions.size > 0 ? (
             <div className="selected-permissions">
               {Array.from(selectedPermissions).map((scope) => (
-                <span key={scope} className="permission-tag">
-                  {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[scope]?.name || scope}
-                  <button
-                    onClick={() => handlePermissionToggle(scope)}
-                    className="remove-btn"
-                    title="제거"
-                  >
-                    ×
-                  </button>
+                <span key={scope} className={`permission-tag ${REQUIRED_SCOPES.includes(scope) ? 'required' : 'optional'}`}>
+                  <span className="tag-icon">{INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[scope]?.icon}</span>
+                  <span className="tag-code">{scope}</span>
+                  {!REQUIRED_SCOPES.includes(scope) && (
+                    <button
+                      onClick={() => handlePermissionToggle(scope)}
+                      className="remove-btn"
+                      title="제거"
+                    >
+                      ×
+                    </button>
+                  )}
                 </span>
               ))}
             </div>
@@ -164,15 +194,6 @@ function PermissionsPage() {
           💡 선택한 권한은 Instagram의 보안 정책에 따라 안전하게 관리됩니다
         </p>
       </div>
-
-      {/* 권한 다이얼로그 */}
-      <PermissionsDialog 
-        isOpen={showDialog}
-        onClose={() => setShowDialog(false)}
-        onConfirm={(permissions) => {
-          setSelectedPermissions(new Set(permissions))
-        }}
-      />
     </div>
   )
 }

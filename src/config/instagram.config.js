@@ -18,27 +18,37 @@ export const INSTAGRAM_CONFIG = {
   // 권한 설명
   SCOPE_DESCRIPTIONS: {
     user_profile: {
-      name: '프로필 정보',
-      description: '사용자명, 프로필 사진 등 기본 정보에 액세스합니다.'
+      name: 'Profile Info',
+      displayName: '프로필 정보',
+      description: '사용자명, 프로필 사진 등 기본 정보에 액세스합니다.',
+      icon: '👤'
     },
     user_media: {
-      name: '미디어 정보',
-      description: '게시된 미디어의 목록과 정보에 액세스합니다.'
+      name: 'Media Access',
+      displayName: '미디어 정보',
+      description: '게시된 미디어의 목록과 정보에 액세스합니다.',
+      icon: '📸'
     },
     threads_basic: {
-      name: 'Threads 기본 기능',
+      name: 'threads_basic',
+      displayName: 'Threads 기본 기능',
       description: 'Show your connected Threads profile and connection status inside this app.',
-      icon: '📱'
+      icon: '📱',
+      isRequired: true
     },
     threads_read_replies: {
-      name: 'Threads 답글 읽기',
+      name: 'threads_read_replies',
+      displayName: 'Threads 답글 읽기',
       description: 'Retrieve replies to your Threads posts so you can review and respond to conversations from this dashboard.',
-      icon: '💬'
+      icon: '💬',
+      isRequired: true
     },
     threads_keyword_search: {
-      name: 'Threads 키워드 검색',
+      name: 'threads_keyword_search',
+      displayName: 'Threads 키워드 검색',
       description: 'Retrieve public Threads posts matching predefined keywords you configure (e.g., brand name, product name, campaign hashtag), and display them in the monitoring dashboard.',
-      icon: '🔍'
+      icon: '🔍',
+      isRequired: true
     }
   },
   

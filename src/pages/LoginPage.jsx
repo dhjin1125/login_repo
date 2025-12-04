@@ -62,14 +62,47 @@ function LoginPage() {
         {/* 선택된 권한 표시 */}
         {selectedPermissions && selectedPermissions.length > 0 && (
           <div className="permissions-info">
-            <h3>요청된 권한</h3>
-            <div className="permissions-tags">
-              {selectedPermissions.map((perm) => (
-                <span key={perm} className="perm-tag">
-                  {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.name || perm}
-                </span>
-              ))}
+            <h3>📋 요청된 권한</h3>
+            
+            {/* 필수 권한 */}
+            <div className="permissions-group required-group">
+              <div className="group-header">
+                <span>⭐ 필수 권한</span>
+                <span className="badge">REQUIRED</span>
+              </div>
+              <div className="permissions-tags">
+                {['threads_basic', 'threads_read_replies', 'threads_keyword_search'].map((perm) => (
+                  selectedPermissions.includes(perm) && (
+                    <span key={perm} className="perm-tag required-tag">
+                      <span className="tag-icon">{INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.icon}</span>
+                      <span className="tag-code">{perm}</span>
+                      <span className="tag-check">✓</span>
+                    </span>
+                  )
+                ))}
+              </div>
             </div>
+
+            {/* 선택 권한 */}
+            {['user_profile', 'user_media'].some(p => selectedPermissions.includes(p)) && (
+              <div className="permissions-group optional-group">
+                <div className="group-header">
+                  <span>🔧 선택 권한</span>
+                  <span className="badge">OPTIONAL</span>
+                </div>
+                <div className="permissions-tags">
+                  {['user_profile', 'user_media'].map((perm) => (
+                    selectedPermissions.includes(perm) && (
+                      <span key={perm} className="perm-tag optional-tag">
+                        <span className="tag-icon">{INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.icon}</span>
+                        <span className="tag-name">{INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.displayName}</span>
+                        <span className="tag-check">✓</span>
+                      </span>
+                    )
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

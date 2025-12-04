@@ -136,23 +136,59 @@ function MainPage() {
             <span className="lock-icon">🔐</span>
             <h3>부여된 권한</h3>
           </div>
-          <div className="permissions-grid">
-            {grantedPermissions.map((perm) => (
-              <div key={perm} className="permission-item-card">
-                <div className="perm-icon">
-                  {perm === 'user_profile' && '👤'}
-                  {perm === 'user_media' && '📸'}
-                  {perm === 'threads_basic' && '📱'}
-                  {perm === 'threads_read_replies' && '💬'}
-                  {perm === 'threads_keyword_search' && '🔍'}
-                </div>
-                <div className="perm-name">
-                  {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.name || perm}
-                </div>
-                <div className="perm-check">✓</div>
-              </div>
-            ))}
+          
+          {/* 필수 권한 (REQUIRED) */}
+          <div className="permissions-section-main">
+            <div className="section-label required">
+              <span className="section-icon">⭐</span>
+              <span className="section-name">필수 권한</span>
+              <span className="section-badge">REQUIRED</span>
+            </div>
+            <div className="permissions-grid">
+              {['threads_basic', 'threads_read_replies', 'threads_keyword_search'].map((perm) => (
+                grantedPermissions.includes(perm) && (
+                  <div key={perm} className="permission-item-card required-card">
+                    <div className="perm-icon">
+                      {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.icon}
+                    </div>
+                    <div className="perm-code">
+                      {perm}
+                    </div>
+                    <div className="perm-check">✓</div>
+                  </div>
+                )
+              ))}
+              {!['threads_basic', 'threads_read_replies', 'threads_keyword_search'].some(p => grantedPermissions.includes(p)) && (
+                <div className="no-permissions">필수 권한이 없습니다</div>
+              )}
+            </div>
           </div>
+
+          {/* 선택 권한 */}
+          {['user_profile', 'user_media'].some(p => grantedPermissions.includes(p)) && (
+            <div className="permissions-section-main">
+              <div className="section-label optional">
+                <span className="section-icon">🔧</span>
+                <span className="section-name">선택 권한</span>
+                <span className="section-badge">OPTIONAL</span>
+              </div>
+              <div className="permissions-grid">
+                {['user_profile', 'user_media'].map((perm) => (
+                  grantedPermissions.includes(perm) && (
+                    <div key={perm} className="permission-item-card optional-card">
+                      <div className="perm-icon">
+                        {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.icon}
+                      </div>
+                      <div className="perm-name">
+                        {INSTAGRAM_CONFIG.SCOPE_DESCRIPTIONS[perm]?.displayName}
+                      </div>
+                      <div className="perm-check">✓</div>
+                    </div>
+                  )
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 기능 안내 */}

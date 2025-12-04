@@ -103,7 +103,6 @@
   padding: 24px;
   margin-bottom: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #667eea;
 }
 
 .permissions-header-title {
@@ -123,6 +122,61 @@
   font-size: 24px;
 }
 
+/* 권한 섹션 */
+.permissions-section-main {
+  margin-bottom: 20px;
+}
+
+.permissions-section-main:last-child {
+  margin-bottom: 0;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.section-icon {
+  font-size: 16px;
+}
+
+.section-name {
+  flex: 1;
+}
+
+.section-badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.section-label.required {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #856404;
+}
+
+.section-label.required .section-badge {
+  background-color: #ffc107;
+  color: #856404;
+}
+
+.section-label.optional {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: #0c5460;
+}
+
+.section-label.optional .section-badge {
+  background-color: #17a2b8;
+  color: white;
+}
+
 .permissions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -139,6 +193,24 @@
   transition: all 0.3s ease;
 }
 
+.permission-item-card.required-card {
+  background: linear-gradient(135deg, #fffbf0 0%, #fff8e6 100%);
+  border: 2px solid #ffc107;
+}
+
+.permission-item-card.required-card:hover {
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+}
+
+.permission-item-card.optional-card {
+  background: linear-gradient(135deg, #f0f8fb 0%, #e8f4f8 100%);
+  border: 2px solid #17a2b8;
+}
+
+.permission-item-card.optional-card:hover {
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.2);
+}
+
 .permission-item-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
@@ -147,6 +219,20 @@
 .perm-icon {
   font-size: 32px;
   margin-bottom: 8px;
+}
+
+.perm-code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .perm-name {

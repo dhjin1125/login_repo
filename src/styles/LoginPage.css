@@ -54,27 +54,108 @@
 }
 
 .permissions-info h3 {
-  margin: 0 0 12px 0;
+  margin: 0 0 16px 0;
   font-size: 14px;
   color: #667eea;
   font-weight: 600;
-  text-transform: uppercase;
+}
+
+/* 권한 그룹 */
+.permissions-group {
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  border-left: 4px solid;
+}
+
+.permissions-group:last-child {
+  margin-bottom: 0;
+}
+
+.required-group {
+  background: linear-gradient(135deg, #fffbf0 0%, #fff8e6 100%);
+  border-left-color: #ffc107;
+}
+
+.optional-group {
+  background: linear-gradient(135deg, #f0f8fb 0%, #e8f4f8 100%);
+  border-left-color: #17a2b8;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.badge {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+.required-group .badge {
+  background-color: #ffc107;
+  color: #856404;
+}
+
+.optional-group .badge {
+  background-color: #17a2b8;
+  color: white;
 }
 
 .permissions-tags {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .perm-tag {
-  display: inline-block;
-  background-color: #e8ecff;
-  color: #667eea;
-  padding: 6px 12px;
-  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
+}
+
+.perm-tag.required-tag {
+  background-color: rgba(255, 193, 7, 0.15);
+  color: #856404;
+}
+
+.perm-tag.optional-tag {
+  background-color: rgba(23, 162, 184, 0.15);
+  color: #0c5460;
+}
+
+.tag-icon {
+  font-size: 14px;
+  min-width: 18px;
+}
+
+.tag-code {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  flex: 1;
+  text-align: left;
+}
+
+.tag-name {
+  font-family: system-ui;
+  flex: 1;
+}
+
+.tag-check {
+  font-weight: 700;
+  margin-left: auto;
 }
 
 .instagram-login-btn {

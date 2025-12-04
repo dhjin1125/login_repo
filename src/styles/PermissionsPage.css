@@ -35,45 +35,6 @@
   margin: 0;
 }
 
-/* 필수 권한 배너 */
-.required-permissions-banner {
-  margin-bottom: 24px;
-}
-
-.info-banner-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.info-banner-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
-}
-
-.banner-icon {
-  font-size: 20px;
-}
-
-.banner-text {
-  flex-grow: 1;
-  text-align: left;
-}
-
-.banner-arrow {
-  font-size: 18px;
-}
-
 .permissions-intro {
   background-color: #f0f4ff;
   padding: 16px;
@@ -89,17 +50,97 @@
   line-height: 1.5;
 }
 
-/* 권한 목록 */
-.permissions-list {
+/* 권한 섹션 */
+.permissions-section {
   margin-bottom: 24px;
-  border: 1px solid #e0e0e0;
   border-radius: 8px;
   overflow: hidden;
+  border: 2px solid #e0e0e0;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  font-weight: 600;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* 필수 권한 섹션 */
+.required-section .section-header {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+  border-bottom: 2px solid #ffc107;
+}
+
+.required-section .section-header h3 {
+  color: #856404;
+}
+
+.required-list {
+  background-color: #fffbf0;
+}
+
+/* 선택 권한 섹션 */
+.optional-section .section-header {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  border-bottom: 2px solid #17a2b8;
+}
+
+.optional-section .section-header h3 {
+  color: #0c5460;
+}
+
+.optional-list {
+  background-color: #f0f8fb;
+}
+
+.required-badge,
+.optional-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.required-badge {
+  background-color: #ffc107;
+  color: #856404;
+}
+
+.optional-badge {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.section-description {
+  padding: 12px 16px;
+  background-color: rgba(255, 193, 7, 0.08);
+  border-top: 1px solid rgba(255, 193, 7, 0.3);
+  font-size: 13px;
+  color: #666;
+}
+
+.section-description p {
+  margin: 0;
+}
+
+/* 권한 목록 */
+.permissions-list {
+  margin-bottom: 0;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
 }
 
 .permission-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 16px;
   border-bottom: 1px solid #e0e0e0;
   transition: background-color 0.2s ease;
@@ -109,23 +150,63 @@
   border-bottom: none;
 }
 
-.permission-item:hover {
-  background-color: #f9f9f9;
+.required-item:hover {
+  background-color: #fff8e6;
+}
+
+.optional-item:hover {
+  background-color: #e8f4f8;
+}
+
+.permission-icon {
+  font-size: 24px;
+  margin-right: 12px;
+  flex-shrink: 0;
+  min-width: 30px;
+  text-align: center;
+}
+
+.required-item .permission-code-name {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 6px 10px;
+  border-radius: 4px;
+  flex-grow: 1;
+  letter-spacing: 0.5px;
 }
 
 .permission-checkbox {
   width: 20px;
   height: 20px;
-  margin-top: 2px;
-  margin-right: 16px;
+  margin-left: 12px;
   cursor: pointer;
-  accent-color: #667eea;
+  accent-color: #ffc107;
   flex-shrink: 0;
+}
+
+.required-item .permission-checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.optional-item .permission-checkbox {
+  accent-color: #17a2b8;
 }
 
 .permission-label {
   cursor: pointer;
   flex-grow: 1;
+}
+
+.permission-label-full {
+  cursor: pointer;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .permission-title {
@@ -211,10 +292,32 @@
   gap: 6px;
   background-color: #e8ecff;
   color: #667eea;
-  padding: 6px 12px;
+  padding: 8px 12px;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.permission-tag.required {
+  background-color: rgba(255, 193, 7, 0.2);
+  color: #856404;
+  border: 1px solid #ffc107;
+}
+
+.permission-tag.optional {
+  background-color: rgba(23, 162, 184, 0.2);
+  color: #0c5460;
+  border: 1px solid #17a2b8;
+}
+
+.tag-icon {
+  font-size: 14px;
+  font-family: system-ui;
+}
+
+.tag-code {
+  letter-spacing: 0.3px;
 }
 
 .remove-btn {
