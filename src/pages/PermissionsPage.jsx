@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { INSTAGRAM_CONFIG } from '../config/instagram.config'
+import PermissionsDialog from '../components/PermissionsDialog'
 import '../styles/PermissionsPage.css'
 
 function PermissionsPage() {
@@ -8,6 +9,7 @@ function PermissionsPage() {
   const location = useLocation()
   const [selectedPermissions, setSelectedPermissions] = useState(new Set())
   const [loading, setLoading] = useState(false)
+  const [showDialog, setShowDialog] = useState(false)
 
   // 모든 권한을 기본으로 선택
   useEffect(() => {
@@ -55,6 +57,18 @@ function PermissionsPage() {
         <div className="permissions-header">
           <h1>🔐 권한 요청</h1>
           <p>앱이 필요로 하는 권한을 선택해주세요</p>
+        </div>
+
+        {/* 필수 권한 소개 배너 */}
+        <div className="required-permissions-banner">
+          <button 
+            className="info-banner-btn"
+            onClick={() => setShowDialog(true)}
+          >
+            <span className="banner-icon">ℹ️</span>
+            <span className="banner-text">필수 권한에 대해 알아보기</span>
+            <span className="banner-arrow">→</span>
+          </button>
         </div>
 
         <div className="permissions-intro">
@@ -150,6 +164,15 @@ function PermissionsPage() {
           💡 선택한 권한은 Instagram의 보안 정책에 따라 안전하게 관리됩니다
         </p>
       </div>
+
+      {/* 권한 다이얼로그 */}
+      <PermissionsDialog 
+        isOpen={showDialog}
+        onClose={() => setShowDialog(false)}
+        onConfirm={(permissions) => {
+          setSelectedPermissions(new Set(permissions))
+        }}
+      />
     </div>
   )
 }

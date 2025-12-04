@@ -35,6 +35,45 @@
   margin: 0;
 }
 
+/* 필수 권한 배너 */
+.required-permissions-banner {
+  margin-bottom: 24px;
+}
+
+.info-banner-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.info-banner-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.banner-icon {
+  font-size: 20px;
+}
+
+.banner-text {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.banner-arrow {
+  font-size: 18px;
+}
+
 .permissions-intro {
   background-color: #f0f4ff;
   padding: 16px;

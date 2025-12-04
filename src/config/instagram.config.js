@@ -27,15 +27,18 @@ export const INSTAGRAM_CONFIG = {
     },
     threads_basic: {
       name: 'Threads 기본 기능',
-      description: 'Threads의 기본 콘텐츠와 메타데이터에 액세스합니다.'
+      description: 'Show your connected Threads profile and connection status inside this app.',
+      icon: '📱'
     },
     threads_read_replies: {
       name: 'Threads 답글 읽기',
-      description: 'Threads의 댓글 및 답글에 액세스합니다.'
+      description: 'Retrieve replies to your Threads posts so you can review and respond to conversations from this dashboard.',
+      icon: '💬'
     },
     threads_keyword_search: {
       name: 'Threads 키워드 검색',
-      description: 'Threads에서 키워드로 콘텐츠를 검색합니다.'
+      description: 'Retrieve public Threads posts matching predefined keywords you configure (e.g., brand name, product name, campaign hashtag), and display them in the monitoring dashboard.',
+      icon: '🔍'
     }
   },
   
